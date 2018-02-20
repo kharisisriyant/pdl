@@ -24,13 +24,14 @@ public class Employee {
     public Date birthDate;
     @Embedded
     public Location location;
+    @ManyToOne
+    public Branch branch;
 
     @OneToMany(mappedBy = "employee")
     public List<Order> orders;
     @OneToMany(mappedBy = "consultant")
     public List<ExecutiveCustomer> executiveCustomers;
-    @ManyToOne
-    public Branch branch;
+
 
     @Override
 	public String toString() {

@@ -228,11 +228,6 @@ public class Main {
         em.getTransaction().begin();
         for (int i = 0; i < 60; i++) {
             Order r = new Order();
-
-        em.getTransaction().begin();
-        for (int i = 0; i < 60; i++) {
-        	Order r = new Order();
-
         	r.orderDate = generateRandomDate(70L, 10L);
             
             em.persist(r);

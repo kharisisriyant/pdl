@@ -1,11 +1,11 @@
 package company;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class Location {
-	String address;
-	String city;
-	String province;
-	String post_code;
+    String address;
+    String city;
+    String province;
+    String post_code;
 }

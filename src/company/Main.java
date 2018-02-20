@@ -1,14 +1,16 @@
 package company;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 public class Main {
     public static void main(String[] args) {
         // Open a database connection
         // (create a new database if it doesn't exist yet):
         EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
+                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
         EntityManager em = emf.createEntityManager();
 
         // Store 1000 Point objects in the database:

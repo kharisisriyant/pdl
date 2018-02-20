@@ -21,6 +21,8 @@ public abstract class Customer {
     public Location location;
     @OneToMany(mappedBy = "customer")
     Set<Card> cards;
+    @ManyToOne
+    Branch branch;
 
     public int countAge() {
         Calendar today = Calendar.getInstance();
@@ -49,15 +51,10 @@ public abstract class Customer {
         return age;
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "ID=" + ID +
-                ", name='" + name + '\'' +
-                ", birth_date=" + birth_date +
-                ", age=" + age +
-                ", location=" + location +
-                ", cards=" + cards +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Customer [ID=" + ID + ", name=" + name + ", birth_date=" + birth_date + ", age=" + age + ", location="
+				+ location + ", cards=" + cards + ", branch=" + branch + "]";
+	}
+
 }

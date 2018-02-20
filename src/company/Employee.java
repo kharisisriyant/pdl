@@ -29,6 +29,8 @@ public class Employee {
     public List<Order> orders;
     @OneToMany(mappedBy = "consultant")
     public List<ExecutiveCustomer> executiveCustomers;
+    @ManyToOne
+    public Branch branch;
 
     @Override
 	public String toString() {

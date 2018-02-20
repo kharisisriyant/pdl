@@ -25,6 +25,8 @@ public class Branch {
     public List<Employee> employeeList;
     @OneToMany(mappedBy = "branch")
     public List<Order> orders;
+    @OneToMany(mappedBy = "branch")
+    public List<Customer> customers;
 	@Override
 	public String toString() {
 	

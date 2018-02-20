@@ -1,6 +1,7 @@
 package company;
 
 import java.util.Date;
+import java.util.Set;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,28 +22,6 @@ public abstract class Customer {
 	public int age;
 	
 	public Location location;
-
-	public Customer() {
-		name = "test";
-		DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-		try {
-			birth_date = format.parse("11/07/1996");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public Customer(String name, String birth_date) {
-		this.name = name;
-		DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-		try {
-			this.birth_date = format.parse(birth_date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
 	public int countAge() {
 		Calendar today = Calendar.getInstance();
@@ -70,4 +49,6 @@ public abstract class Customer {
 	    
 	    return age;
 	}
+	
+	@OneToMany(mappedBy="customer") Set<Card> cards;
 }

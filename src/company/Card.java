@@ -26,6 +26,14 @@ public class Card {
 		return lastDateOfTransaction;
 	}
 	
+	@Override
+	public String toString() {
+		return "Card [number=" + number + ", type=" + type + ", issuingBank=" + issuingBank
+				+ ", totalAmountOfTransaction=" + totalAmountOfTransaction + ", lastDateOfTransaction="
+				+ lastDateOfTransaction + ", expiryDate=" + expiryDate + ", orders=" + orders + ", customer=" + customer
+				+ "]";
+	}
+
 	public int getTotalAmountOfTransaction() {
 		return totalAmountOfTransaction;
 	}

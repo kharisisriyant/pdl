@@ -30,7 +30,14 @@ public class Employee {
     @OneToMany(mappedBy = "consultant")
     public List<ExecutiveCustomer> executiveCustomers;
 
-    public int countAge() {
+    @Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", phoneNumber=" + phoneNumber + ", startingDate="
+				+ startingDate + ", baseSalary=" + baseSalary + ", birthDate=" + birthDate + ", location=" + location
+				+ ", orders=" + orders + ", executiveCustomers=" + executiveCustomers + "]";
+	}
+
+	public int countAge() {
         Calendar today = Calendar.getInstance();
         Calendar birthDate = Calendar.getInstance();
         birthDate.setTime(this.birthDate);

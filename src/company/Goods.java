@@ -19,6 +19,7 @@ public class Goods implements Serializable {
     @GeneratedValue
     public long id;
 
+    public String name;
     public String description;
     public String color;
     public String type;
@@ -32,5 +33,9 @@ public class Goods implements Serializable {
     public Goods() {
     }
 
-
+	@Override
+	public String toString() {
+		return "Goods [id=" + id + ", name=" + name + ", description=" + description + ", color=" + color + ", type="
+				+ type + ", quantity=" + quantity + ", consistOf=" + consistOf + ", orders=" + orders + "]";
+	}
 }

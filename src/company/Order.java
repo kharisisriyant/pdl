@@ -20,7 +20,8 @@ public class Order {
     public List<Goods> goods;
     @ManyToOne
     public Employee employee;
-    @ManyToOne
+
+	@ManyToOne
     public Branch branch;
     @ManyToOne
     public Customer customer;
@@ -29,4 +30,10 @@ public class Order {
 
     public Order() {
     }
+    
+    @Override
+	public String toString() {
+		return "Order [id=" + id + ", orderDate=" + orderDate + ", goods=" + goods + ", employee=" + employee
+				+ ", branch=" + branch + ", customer=" + customer + ", card=" + card + "]";
+	}
 }

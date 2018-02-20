@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -11,13 +13,13 @@ import java.util.Random;
 public class Main {
 	static String connection = "$objectdb/db/pdlfixbgt.odb";
     public static void main(String[] args) {
-    	populateRegCustomer();
-    	populateExecutiveCustomer();
-    	populateBranch();
-    	populateCard();
-    	populateEmployee();
-    	populateGoods();
-    	populateOrder();
+//    	populateRegCustomer();
+//    	populateExecutiveCustomer();
+//    	populateBranch();
+//    	populateCard();
+//    	populateEmployee();
+//    	populateGoods();
+//    	populateOrder();
     	populateRelationship();
     }
     
@@ -190,7 +192,7 @@ public class Main {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
         	Employee r = new Employee();
             r.name = "Orang " + (i+10);
             r.baseSalary = randomNumber(3000000, 5000000);
@@ -328,15 +330,55 @@ public class Main {
         	}
         	for(int i=0; i< execCusts.size(); i++) {
         		execCusts.get(i).branch = branches.get(randomNumber(0, branchsize - 1));
+        		execCusts.get(i).consultant= employees.get(randomNumber(0, 4));        		
         	}
         	for(int i=0; i< employees.size(); i++) {
         		employees.get(i).branch = branches.get(randomNumber(0, branchsize - 1));
         	}
-        	em.getTransaction().commit();
+        	
+        	for(int i=0; i< cards.size(); i++) {
+        		if (i<8)
+        			cards.get(i).customer = regCusts.get(randomNumber(0, 9));
+        		else
+        			cards.get(i).customer = execCusts.get(randomNumber(0, 9));
+        	}
+        	
+        	int orderSize = orders.size();
+        	for(int i=0; i<orders.size(); i++) {
+        		orders.get(i).branch = branches.get(randomNumber(0, branchsize - 1));
+        		orders.get(i).employee = employees.get(randomNumber(0, 5- 1));
+        		if (i%2==0)
+        			orders.get(i).customer = regCusts.get(randomNumber(0, 9));
+        		else
+        			orders.get(i).customer = execCusts.get(randomNumber(0, 9));
+        		if (!orders.get(i).customer.cards.isEmpty())
+        			orders.get(i).card = orders.get(i).customer.cards.iterator().next();
+        		int goodssize= randomNumber(1,5);
+        		List<Goods> lgoods = new ArrayList<Goods>();
+        		for(int j= 0; j< goodssize; j++) {
+        			lgoods.add(goods.get(randomNumber(0, goods.size()-1)));
+        		}
+        		orders.get(i).goods = lgoods;
+        	}
+        	
+        	for(int i=0; i<goods.size(); i++) {
+        		int goodssize= randomNumber(0,4);
+        		if(goodssize >0 ) {
+	        		List<Goods> lgoods = new ArrayList<Goods>();
+	        		for(int j= 0; j< goodssize; j++) {
+	        			lgoods.add(goods.get(randomNumber(0, goods.size()-1)));
+	        		}
+	        		goods.get(i).consistOf = lgoods;
+        		} else {
+        			goods.get(i).consistOf = null;
+        		}
+        	}
+        	
+    	em.getTransaction().commit();
 
-        query = em.createQuery("SELECT p FROM RegularCustomer p", RegularCustomer.class);
-        List<RegularCustomer> results = query.getResultList();
-        for (RegularCustomer p : results) {
+        queryBranch = em.createQuery("SELECT p FROM Branch p", Branch.class);
+        List<Branch> results = queryBranch.getResultList();
+        for (Branch p : results) {
             System.out.println(p);
         }
 

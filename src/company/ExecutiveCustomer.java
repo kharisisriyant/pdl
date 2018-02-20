@@ -1,6 +1,6 @@
 package company;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 
 @Entity
 public class ExecutiveCustomer extends Customer {

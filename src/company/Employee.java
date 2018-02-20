@@ -1,32 +1,35 @@
 package company;
 
-import java.util.Date;
-import java.util.Set;
 import javax.persistence.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by anthony on 2/20/18.
+ */
 
 @Entity
-public abstract class Customer {
+public class Employee {
     @Id
     @GeneratedValue
-    public Long ID;
+    public long id;
 
     public String name;
-
+    public List<String> phoneNumber;
     @Temporal(TemporalType.DATE)
-    public Date birth_date;
+    public Date startingDate;
+    public Integer baseSalary;
+    @Temporal(TemporalType.DATE)
+    public Date birthDate;
 
-    public int age;
-    @Embedded
-    public Location location;
+    @OneToMany(mappedBy = "employee")
+    List<Order> orders;
 
     public int countAge() {
         Calendar today = Calendar.getInstance();
         Calendar birthDate = Calendar.getInstance();
-        birthDate.setTime(this.birth_date);
+        birthDate.setTime(this.birthDate);
 
         int todayYear = today.get(Calendar.YEAR);
         int birthDateYear = birthDate.get(Calendar.YEAR);
@@ -36,7 +39,7 @@ public abstract class Customer {
         int birthDateMonth = birthDate.get(Calendar.MONTH);
         int todayDayOfMonth = today.get(Calendar.DAY_OF_MONTH);
         int birthDateDayOfMonth = birthDate.get(Calendar.DAY_OF_MONTH);
-        age = todayYear - birthDateYear;
+        int age = todayYear - birthDateYear;
 
         // If birth date is greater than todays date (after 2 days adjustment of leap year) then decrement age one year
         if ((birthDateDayOfYear - todayDayOfYear > 3) || (birthDateMonth > todayMonth)) {
@@ -49,5 +52,5 @@ public abstract class Customer {
 
         return age;
     }
-	@OneToMany(mappedBy="customer") Set<Card> cards;
+
 }

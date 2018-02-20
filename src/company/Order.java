@@ -22,4 +22,6 @@ public class Order {
     public Employee employee;
     @ManyToOne
     public Branch branch;
+    @ManyToOne
+    public Customer customer;
 }

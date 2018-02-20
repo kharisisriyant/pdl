@@ -28,12 +28,12 @@ public class Main {
         System.out.println("Average X: " + q2.getSingleResult());
 
         // Retrieve all the Point objects from the database:
-        TypedQuery<Point> query =
-            em.createQuery("SELECT p FROM Point p", Point.class);
-        List<Point> results = query.getResultList();
-        for (Point p : results) {
-            System.out.println(p);
-        }
+//        TypedQuery<Point> query =
+//            em.createQuery("SELECT p FROM Point p", Point.class);
+//        List<Point> results = query.getResultList();
+//        for (Point p : results) {
+//            System.out.println(p);
+//        }
 
         // Close the database connection:
         em.close();

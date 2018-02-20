@@ -24,7 +24,7 @@ public class Branch {
     @OneToMany(mappedBy = "branch")
     public List<Employee> employeeList;
     @OneToMany(mappedBy = "branch")
-    List<Order> orders;
+    public List<Order> orders;
 
     public Branch() {
     }

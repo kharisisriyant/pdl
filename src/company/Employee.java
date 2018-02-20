@@ -22,9 +22,13 @@ public class Employee {
     public Integer baseSalary;
     @Temporal(TemporalType.DATE)
     public Date birthDate;
+    @Embedded
+    public Location location;
 
     @OneToMany(mappedBy = "employee")
-    List<Order> orders;
+    public List<Order> orders;
+    @OneToMany(mappedBy = "consultant")
+    public List<ExecutiveCustomer> executiveCustomers;
 
     public int countAge() {
         Calendar today = Calendar.getInstance();

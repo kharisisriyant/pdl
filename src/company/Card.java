@@ -1,8 +1,8 @@
 package company;
 
-import java.util.Date;
-
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Card {
@@ -17,6 +17,11 @@ public class Card {
 	@Temporal(TemporalType.DATE)
 	public Date expiryDate;
 
+	@OneToMany(mappedBy = "card")
+	public List<Order> orders;
+	@ManyToOne
+	Customer customer;
+	
 	public Date getLastDateOfTransaction() {
 		return lastDateOfTransaction;
 	}
@@ -24,6 +29,4 @@ public class Card {
 	public int getTotalAmountOfTransaction() {
 		return totalAmountOfTransaction;
 	}
-	
-	@ManyToOne Customer customer;
 }

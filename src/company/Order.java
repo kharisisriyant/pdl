@@ -24,4 +24,9 @@ public class Order {
     public Branch branch;
     @ManyToOne
     public Customer customer;
+    @ManyToOne
+    public Card card;
+
+    public Order() {
+    }
 }

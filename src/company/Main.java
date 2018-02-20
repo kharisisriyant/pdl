@@ -9,23 +9,32 @@ import java.util.List;
 import java.util.Random;
 
 public class Main {
+    static EntityManagerFactory emf = Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
+    static EntityManager em = emf.createEntityManager();
+    static Random rnd = new Random();
     public static void main(String[] args) {
-    	// populateRegCustomer();
-    	// populateExecutiveCustomer();
-//    	 populateBranch();
-//    	populateCard();
-//    	populateEmployee();
-//    	populateGoods();
-    	populateOrder();
+        populateRegCustomer();
+        populateExecutiveCustomer();
+        populateBranch();
+        populateCard();
+        populateEmployee();
+        populateGoods();
+        populateOrder();
+
+        //1
+        TypedQuery<Object[]> query = em.createQuery(
+                "SELECT COUNT(p), p.location.city FROM RegularCustomer p WHERE p.location.province = :province GROUP BY p.location.city", Object[].class);
+        List<Object[]> res1 = query.setParameter("province", "Jawa Barat").getResultList();
+        for (Object[] r : res1) {
+            System.out.println("Count: " + r[0] + ", City: " + r[1]);
+        }
+        em.close();
+        emf.close();
     }
     
     static Date generateRandomDate(long yearStart, long yearCount) {
-        Random  rnd;
         Date    dt;
         long    ms;
-
-        // Get a new random instance, seeded from the clock
-        rnd = new Random();
 
         // Get an Epoch value roughly between 1940 and 2010
         // -946771200000L = January 1, 1940
@@ -37,28 +46,23 @@ public class Main {
         dt = new Date(ms);
         return dt;
     }
-    
-    void populateRegCustomer() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
-        EntityManager em = emf.createEntityManager();
 
-        // Store 1000 Point objects in the database:
-//        em.getTransaction().begin();
-//        for (int i = 0; i < 10; i++) {
-//            RegularCustomer r = new RegularCustomer();
-//            r.name = "Orang " + i;
-//            r.birth_date = generateRandomDate();
-//            Location l = new Location();
-//            l.address = "Jalan " + i + " nomor " + i;
-//            l.city = "Bandung";
-//            l.post_code = "4051" + (i % 10);
-//            l.province = "Jawa Barat";
-//            r.location = l;
-//            
-//            em.persist(r);
-//        }
-//        em.getTransaction().commit();
+    static void populateRegCustomer() {
+        em.getTransaction().begin();
+        for (int i = 0; i < 10; i++) {
+            RegularCustomer r = new RegularCustomer();
+            r.name = "Orang " + i;
+            r.birth_date = generateRandomDate(1950, 50);
+            Location l = new Location();
+            l.address = "Jalan " + i + " nomor " + i;
+            l.city = i % 2 == 0 ? "Bandung" : "Bogor";
+            l.post_code = "4051" + (i % 10);
+            l.province = "Jawa Barat";
+            r.location = l;
+
+            em.persist(r);
+        }
+        em.getTransaction().commit();
 
         TypedQuery<RegularCustomer> query =
                 em.createQuery("SELECT p FROM RegularCustomer p", RegularCustomer.class);
@@ -67,17 +71,9 @@ public class Main {
         	p.countAge();
             System.out.println(p);
         }
-
-        // Close the database connection:
-        em.close();
-        emf.close();
     }
     
     static void populateExecutiveCustomer() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
-        EntityManager em = emf.createEntityManager();
-
         em.getTransaction().begin();
         for (int i = 0; i < 10; i++) {
             ExecutiveCustomer r = new ExecutiveCustomer();
@@ -102,27 +98,15 @@ public class Main {
         	p.countAge();
             System.out.println(p);
         }
-
-        // Close the database connection:
-        em.close();
-        emf.close();    	
     }
 
     static void populateBranch() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
-        EntityManager em = emf.createEntityManager();
-
         em.getTransaction().begin();
         for (int i = 0; i < 5; i++) {
         	Branch r = new Branch();
             r.name = "Branch " + (i+10);
             r.area = 250;
-            if(i==0) {
-            	r.isHeadquarter = true;
-            } else {
-                r.isHeadquarter = false;            	
-            }
+            r.isHeadquarter = i == 0;
             Location l = new Location();
             l.address = "Jalan " + (i+10) + " nomor " + (i+10);
             l.city = "Bandung";
@@ -140,35 +124,33 @@ public class Main {
         for (Branch p : results) {
             System.out.println(p);
         }
-
-        // Close the database connection:
-        em.close();
-        emf.close();    	
     }
     
     static void populateCard() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
-        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        for (int i = 0; i < 15; i++) {
+            Card r = new Card();
+            if (i % 2 == 0) {
+                r.type = "debit";
+            } else {
+                r.type = "credit";
+            }
+            switch (i % 3) {
+                case 0:
+                    r.issuingBank = "BNI";
+                    break;
+                case 1:
+                    r.issuingBank = "BCA";
+                    break;
+                case 2:
+                    r.issuingBank = "BRI";
+                    break;
+            }
+            r.expiryDate = generateRandomDate(75L, 10L);
 
-//        em.getTransaction().begin();
-//        for (int i = 0; i < 15; i++) {
-//        	Card r = new Card();
-//        	if (i%2 == 0) {
-//        		r.type = "debit";
-//        	} else {
-//        		r.type = "credit";
-//        	}
-//        	switch (i%3) {
-//        		case 0: r.issuingBank= "BNI"; break;
-//        		case 1: r.issuingBank= "BCA"; break;
-//        		case 2: r.issuingBank= "BRI"; break;
-//        	}
-//        	r.expiryDate = generateRandomDate(75L, 10L);
-//            
-//            em.persist(r);
-//        }
-//        em.getTransaction().commit();
+            em.persist(r);
+        }
+        em.getTransaction().commit();
 
         TypedQuery<Card> query =
                 em.createQuery("SELECT p FROM Card p", Card.class);
@@ -177,34 +159,27 @@ public class Main {
             System.out.println(p);
         }
 
-        // Close the database connection:
-        em.close();
-        emf.close();    	
     }
     
     static void populateEmployee() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
-        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        for (int i = 0; i < 5; i++) {
+            Employee r = new Employee();
+            r.name = "Orang " + (i + 10);
+            r.baseSalary = randomNumber(5000000, 3000000);
+            r.startingDate = generateRandomDate(30L, 40L);
+            r.birthDate = generateRandomDate(0, 70L);
+            Location l = new Location();
+            l.address = "Jalan " + (i + 10) + " nomor " + (i + 10);
+            l.city = "Bandung";
+            l.post_code = "4051" + (i % 10);
+            l.province = "Jawa Barat";
+            r.location = l;
+            r.countAge();
 
-//        em.getTransaction().begin();
-//        for (int i = 0; i < 5; i++) {
-//        	Employee r = new Employee();
-//            r.name = "Orang " + (i+10);
-//            r.baseSalary = randomNumber(5000000, 3000000);
-//            r.startingDate = generateRandomDate(30L, 40L);
-//            r.birthDate = generateRandomDate(0, 70L);
-//            Location l = new Location();
-//            l.address = "Jalan " + (i+10) + " nomor " + (i+10);
-//            l.city = "Bandung";
-//            l.post_code = "4051" + (i % 10);
-//            l.province = "Jawa Barat";
-//            r.location = l;
-//            r.countAge();
-//            
-//            em.persist(r);
-//        }
-//        em.getTransaction().commit();
+            em.persist(r);
+        }
+        em.getTransaction().commit();
 
         TypedQuery<Employee> query =
                 em.createQuery("SELECT p FROM Employee p", Employee.class);
@@ -214,8 +189,7 @@ public class Main {
         }
 
         // Close the database connection:
-        em.close();
-        emf.close();    	
+
     }
     
     static int randomNumber(int maximum, int minimum) {
@@ -226,10 +200,6 @@ public class Main {
     }
     
     static void populateGoods() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
-        EntityManager em = emf.createEntityManager();
-
         em.getTransaction().begin();
         for (int i = 0; i < 30; i++) {
         	Goods r = new Goods();
@@ -257,26 +227,18 @@ public class Main {
         for (Goods p : results) {
             System.out.println(p);
         }
-
-        // Close the database connection:
-        em.close();
-        emf.close();    	
     }
     
     static void populateOrder() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("$objectdb/db/points.odb");
-        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        for (int i = 0; i < 60; i++) {
+            Order r = new Order();
 
-//        em.getTransaction().begin();
-//        for (int i = 0; i < 60; i++) {
-//        	Order r = new Order();
-//
-//        	r.orderDate = generateRandomDate(70L, 10L);
-//            
-//            em.persist(r);
-//        }
-//        em.getTransaction().commit();
+            r.orderDate = generateRandomDate(70L, 10L);
+
+            em.persist(r);
+        }
+        em.getTransaction().commit();
 
         TypedQuery<Order> query =
                 em.createQuery("SELECT p FROM Order p", Order.class);
@@ -284,9 +246,5 @@ public class Main {
         for (Order p : results) {
             System.out.println(p);
         }
-
-        // Close the database connection:
-        em.close();
-        emf.close();    	
     }
 }

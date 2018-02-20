@@ -1,12 +1,9 @@
 package company;
 
+import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
-import javax.persistence.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 @Entity
 public abstract class Customer {
@@ -22,6 +19,8 @@ public abstract class Customer {
     public int age;
     @Embedded
     public Location location;
+    @OneToMany(mappedBy = "customer")
+    Set<Card> cards;
 
     public int countAge() {
         Calendar today = Calendar.getInstance();
@@ -49,5 +48,16 @@ public abstract class Customer {
 
         return age;
     }
-	@OneToMany(mappedBy="customer") Set<Card> cards;
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "ID=" + ID +
+                ", name='" + name + '\'' +
+                ", birth_date=" + birth_date +
+                ", age=" + age +
+                ", location=" + location +
+                ", cards=" + cards +
+                '}';
+    }
 }

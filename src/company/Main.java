@@ -1,12 +1,12 @@
 package company;
 
-import java.util.Date;
-import java.util.Random;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,30 +22,23 @@ public class Main {
             RegularCustomer r = new RegularCustomer();
             r.name = "Orang " + i;
             r.birth_date = generateRandomDate();
-            r.location.address = "Jalan " + i + " nomor " + i;
-            r.location.city = "Bandung";
-            r.location.post_code = "4051" + (i%10);
-            r.location.province = "Jawa Barat";
+            Location l = new Location();
+            l.address = "Jalan " + i + " nomor " + i;
+            l.city = "Bandung";
+            l.post_code = "4051" + (i % 10);
+            l.province = "Jawa Barat";
+            r.location = l;
             
             em.persist(r);
         }
         em.getTransaction().commit();
 
-        // Find the number of Point objects in the database:
-        Query q1 = em.createQuery("SELECT * FROM RegularCustomer r");
-        System.out.println("Select *: " + q1.getSingleResult());
-
-        // Find the average X value:
-//        Query q2 = em.createQuery("SELECT AVG(p.x) FROM Point p");
-//        System.out.println("Average X: " + q2.getSingleResult());
-
-        // Retrieve all the Point objects from the database:
-//        TypedQuery<Point> query =
-//            em.createQuery("SELECT p FROM Point p", Point.class);
-//        List<Point> results = query.getResultList();
-//        for (Point p : results) {
-//            System.out.println(p);
-//        }
+        TypedQuery<RegularCustomer> query =
+                em.createQuery("SELECT p FROM RegularCustomer p", RegularCustomer.class);
+        List<RegularCustomer> results = query.getResultList();
+        for (RegularCustomer p : results) {
+            System.out.println(p);
+        }
 
         // Close the database connection:
         em.close();

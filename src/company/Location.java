@@ -8,4 +8,14 @@ public class Location {
     String city;
     String province;
     String post_code;
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", post_code='" + post_code + '\'' +
+                '}';
+    }
 }
